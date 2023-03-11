@@ -5,11 +5,15 @@ const userController = require('../controllers/userController');
 const { auth } = require('../middlewares/auth');
 const { restrictTo } = require('../middlewares/permissions');
 
+router.route('/createSuperAdmin').post(userController.createSuperAdmin);
+
+router.use(auth, restrictTo('Super_Admin'));
+
 router.route('/')
-    .get(auth, userController.getAllUsers)
+    .get(userController.getAllUsers)
     .post(userController.createUser);
 
 router.route('/:id')
-    .delete(auth, restrictTo('Super_Admin'), userController.deleteUser);
+    .delete(userController.deleteUser);
     
 module.exports = router;
