@@ -1,5 +1,6 @@
 const compression = require('compression');
 const dotEnv = require('dotenv');
+const morgan = require('morgan');
 const express = require('express');
 
 const app = express();
@@ -7,6 +8,10 @@ dotEnv.config({ path: './config.env'});
 
 app.use(express.json());
 app.use(compression());
+
+if (process.env.NODE_ENV === 'development') {
+	app.use(morgan('dev'));
+}
 
 // Router handlers
 const userRouter = require('./routes/userRoutes');
