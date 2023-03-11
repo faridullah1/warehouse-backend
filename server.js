@@ -1,5 +1,8 @@
 const app = require('./app');
 
+// configure tables relation ships
+require('./associations')();
+
 const sequelize = require('./db');
 await = sequelize.sync();
 

@@ -10,12 +10,14 @@ app.use(compression());
 
 // Router handlers
 const userRouter = require('./routes/userRoutes');
+const departmentRouter = require('./routes/departmentRoutes');
 const authRouter = require('./routes/authRoutes');
 
 const AppError = require('./utils/AppError');
 const globalErrorHandler = require('./controllers/errorController');
 
 app.use('/api/users', userRouter);
+app.use('/api/departments', departmentRouter);
 app.use('/api/auth', authRouter);
 
 // Handling unhandled routes
