@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const Joi = require('joi');
 const { Op } = require('sequelize');
+const { Department } = require('../models/departmentModel');
 
 const { User, validate } = require("../models/userModel");
 const AppError = require("../utils/AppError");
@@ -12,7 +13,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 	const search = req.query;
 
     const where = {
-        type: 'Warehouse_Personnel'
+        type: 'Warehouse_Personnel',
     };
 
 	for (let key in search) {
@@ -31,6 +32,13 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
         offset,
         limit,
         where,
+		include: [{
+			model: Department,
+			where: {
+				departmentId: req.user.departmentId
+			},
+			attributes: ['departmentId', 'name']
+		}],
         order: [['createdAt', 'DESC']]
     });
 
@@ -38,6 +46,21 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
         status: 'success',
         data: {
             users
+        }
+    });
+});
+
+exports.getUser = catchAsync(async (req, res, next) => {
+	const userId = +req.params.id;
+
+	const user = await User.findByPk(userId);
+
+    if (!user) return next(new AppError('user with the given id not found', 404));
+
+    res.status(200).json({
+        status: 'success',
+        data: { 
+            user
         }
     });
 });
@@ -55,6 +78,21 @@ exports.createUser = catchAsync(async (req, res, next) => {
 	delete user.dataValues.password;
 
     res.status(201).json({
+        status: 'success',
+        data: { 
+            user
+        }
+    });
+});
+
+exports.updateUser = catchAsync(async (req, res, next) => {
+	const userId = +req.params.id;
+
+	const user = await User.update(req.body, { where: { userId }});
+
+    if (!user) return next(new AppError('user with the given id not found', 404));
+
+    res.status(200).json({
         status: 'success',
         data: { 
             user
