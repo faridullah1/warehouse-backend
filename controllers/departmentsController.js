@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-const { Department } = require("../models/department");
+const { Department } = require("../models/departmentModel");
 const AppError = require("../utils/AppError");
 const catchAsync = require('../utils/catchAsync');
 

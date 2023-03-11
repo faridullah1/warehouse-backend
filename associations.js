@@ -1,4 +1,4 @@
-const { Department } = require("./models/department");
+const { Department } = require("./models/departmentModel");
 const { User } = require("./models/userModel");
 
 module.exports = function() {

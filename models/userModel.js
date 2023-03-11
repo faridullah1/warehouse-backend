@@ -2,7 +2,7 @@ const Sequelize = require('sequelize');
 const Joi = require('joi');
 
 const db = require('../db');
-const { Department } = require('./department');
+const { Department } = require('./departmentModel');
 
 const User = db.define('user', 
 {
