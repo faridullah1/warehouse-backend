@@ -23,7 +23,7 @@ const File = db.define('file',
 		}
 	},
 	pictures: {
-		type: Sequelize.STRING,
+		type: Sequelize.STRING(2000),
 		get() {
 			if (this.getDataValue('pictures')) {
 				return this.getDataValue('pictures').split(';');
@@ -34,6 +34,10 @@ const File = db.define('file',
 				this.setDataValue('pictures', val.join(';'));
 			}
 		},
+	},
+	isDamaged: {
+		type: Sequelize.BOOLEAN,
+		defaultValue: false
 	},
 	userId: {
 		type: Sequelize.INTEGER,

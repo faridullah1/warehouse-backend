@@ -29,8 +29,8 @@ exports.createFile = catchAsync(async (req, res, next) => {
 		req.body.pictures = await Promise.all(promises);
 	}
 
-    const { reference, pictures } = req.body;
-	const file = await File.create({ reference, pictures, userId: req.user.userId });
+    const { reference, pictures, isDamaged } = req.body;
+	const file = await File.create({ reference, pictures, isDamaged, userId: req.user.userId });
 
     res.status(201).json({
         status: 'success',
