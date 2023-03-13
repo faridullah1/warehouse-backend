@@ -1,40 +1,36 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
-const { User } = require('./userModel');
+const { File } = require('./fileModel');
 
-const File = db.define('file', 
+const FileImage = db.define('file_image', 
 {
-	fileId: {
+	fileImageId: {
 		type: Sequelize.INTEGER,
 		autoIncrement: true,
 		allowNull: false,
 		primaryKey: true
 	},
-	reference: {
-		type: Sequelize.STRING(100),
+	url: {
+		type: Sequelize.STRING,
 		allowNull: false,
         validate: {
 			notNull: {
-				msg: 'Reference is required'
+				msg: 'url is required'
 			},
             notEmpty: {
-				msg: 'Reference is required'
+				msg: 'url is required'
 			}
 		}
 	},
-	isDamaged: {
-		type: Sequelize.BOOLEAN,
-		defaultValue: false
-	},
-	userId: {
+	fileId: {
 		type: Sequelize.INTEGER,
 		allowNull: false,
 		references: {
-			model: User,
-			key: 'userId',
+			model: File,
+			key: 'fileId',
 			onDelete: 'RESTRICT'
 		}
 	},
 });
 
-exports.File = File;
+exports.FileImage = FileImage;
