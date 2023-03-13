@@ -9,12 +9,13 @@ aws.config.update({
 });
 
 const getParams = (folderName, file) => {
-  return {
-    ACL: 'public-read',
-    Bucket: process.env.S3_BUCKET,
-    Body: fs.createReadStream(file.path),
-    Key: `${folderName}/${file.originalname}`
-  };
+	const key = folderName ? `${folderName}/${file.originalname}` : `${file.originalname}`;
+	return {
+		ACL: 'public-read',
+		Bucket: process.env.S3_BUCKET,
+		Body: fs.createReadStream(file.path),
+		Key: key
+	};
 };
 
 const uploadToS3 = (file, folderName) =>

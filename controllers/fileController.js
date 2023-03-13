@@ -12,7 +12,7 @@ const upload = multer({
 exports.uploadFilePictures = upload.array('pictures', 100);
 
 exports.getAllFiles = catchAsync(async (req, res, next) => {
-    const files = await File.findAll({ where: { userId: req.user.userId }});
+    const files = await File.findAll();
 
     res.status(200).json({
         status: 'success',
@@ -25,7 +25,7 @@ exports.getAllFiles = catchAsync(async (req, res, next) => {
 exports.createFile = catchAsync(async (req, res, next) => {
     if (req.files) {
 		const promises = [];
-		req.files.forEach(file => promises.push(uploadToS3(file, 'pictures')))
+		req.files.forEach(file => promises.push(uploadToS3(file, '')));
 		req.body.pictures = await Promise.all(promises);
 	}
 
