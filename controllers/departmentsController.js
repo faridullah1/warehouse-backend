@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 
 const { Department } = require("../models/departmentModel");
-const AppError = require("../utils/AppError");
+const AppError = require("../utils/appError");
 const catchAsync = require('../utils/catchAsync');
 
 exports.getAllDepartments = catchAsync(async (req, res, next) => {

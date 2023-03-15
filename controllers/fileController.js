@@ -3,7 +3,7 @@ const { FileImage } = require('../models/fileImageModel');
 
 const { File } = require("../models/fileModel");
 const { User } = require('../models/userModel');
-const AppError = require("../utils/AppError");
+const AppError = require("../utils/appError");
 const catchAsync = require('../utils/catchAsync');
 const uploadToS3 = require('../utils/s3Upload');
 
