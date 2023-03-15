@@ -22,7 +22,7 @@ const fileRouter = require('./routes/fileRoutes');
 const fileImageRouter = require('./routes/fileImageRoutes');
 const authRouter = require('./routes/authRoutes');
 
-const AppError = require('./utils/AppError');
+const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
 app.use('/api/users', userRouter);
