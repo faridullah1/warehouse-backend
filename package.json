@@ -4,8 +4,9 @@
   "description": "The aim of the mobile app is to exchange pictures of incoming/outgoing goods with the colleagues in the office.",
   "main": "server.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "seed": "node seed.js"
+    "start": "node index.js",
+    "seed": "node seed.js",
+    "dev": "nodemon index.js"
   },
   "keywords": [
     "backend",
