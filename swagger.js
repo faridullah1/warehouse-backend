@@ -6,8 +6,8 @@ const doc = {
         title: 'Koolwijk app backend',
         description: 'The aim of the mobile app is to exchange pictures of incoming/outgoing goods with the colleagues in the office.',
     },
-    host: 'localhost:3000',
-    schemes: ['http'],
+    host: 'https://koolwijk-backend.onrender.com',
+    schemes: ['http', 'https'],
     tags: [
         {
             name: "Auth",
