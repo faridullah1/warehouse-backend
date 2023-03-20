@@ -4,6 +4,9 @@ const morgan = require('morgan');
 const cors = require('cors');
 const express = require('express');
 
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./swagger-output.json');
+
 const app = express();
 dotEnv.config({ path: './config.env'});
 
@@ -25,11 +28,17 @@ const authRouter = require('./routes/authRoutes');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController');
 
+app.get('/', (req, res) => {
+	res.status(200).send('Welcome to koolwijk app backend service');
+});
+
 app.use('/api/users', userRouter);
 app.use('/api/departments', departmentRouter);
 app.use('/api/files', fileRouter);
 app.use('/api/fileImages', fileImageRouter);
 app.use('/api/auth', authRouter);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
 
 // Handling unhandled routes
 app.all('*', (req, res, next) => {

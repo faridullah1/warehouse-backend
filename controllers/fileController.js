@@ -13,7 +13,39 @@ const upload = multer({
 
 exports.uploadFilePictures = upload.array('pictures', 100);
 
+exports.me = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['File']
+    // #swagger.description = 'Endpoint for getting all files created by currently logged in user'
+
+    const files = await File.findAll({
+        include: [
+            {
+                model: User,
+                attributes: ['userId', 'name'],
+                where: { userId: req.user.userId }
+            },
+            {
+                model: FileImage,
+                attributes: ['url', 'createdAt']
+            }
+        ],
+        order: [
+            ['createdAt', 'DESC']
+        ]
+    });
+
+    res.status(200).json({
+        status: 'success',
+        data: {
+            files
+        }
+    });
+});
+
 exports.getAllFiles = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['File']
+    // #swagger.description = 'Endpoint for getting all files.'
+
     const files = await File.findAll({
         include: [
             {
@@ -25,6 +57,9 @@ exports.getAllFiles = catchAsync(async (req, res, next) => {
                 model: FileImage,
                 attributes: ['url', 'createdAt']
             }
+        ],
+        order: [
+            ['createdAt', 'DESC']
         ]
     });
 
@@ -37,6 +72,9 @@ exports.getAllFiles = catchAsync(async (req, res, next) => {
 });
 
 exports.createFile = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['File']
+    // #swagger.description = 'Endpoint for creating new File. File has a reference number and can contain multiple pictures'
+
     const { reference, isDamaged } = req.body;
 	const file = await File.create({ reference, isDamaged, userId: req.user.userId });
 
@@ -59,6 +97,9 @@ exports.createFile = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteFile = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['File']
+    // #swagger.description = 'Endpoint for deleting a file by its Id.'
+
     const fileId = +req.params.id;
 
 	const file = await File.destroy({ where: { fileId }});

@@ -8,6 +8,9 @@ const AppError = require("../utils/appError");
 const catchAsync = require('../utils/catchAsync');
 
 exports.getAllUsers = catchAsync(async (req, res, next) => {
+	// #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint for getting all warehouse users. You can filter results by name'
+
     const page = +req.query.page || 1;
 	const limit = +req.query.limit || 10;
 	const search = req.query;
@@ -51,6 +54,9 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 });
 
 exports.getUser = catchAsync(async (req, res, next) => {
+	// #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint for getting warehouse user by its Id.'
+
 	const userId = +req.params.id;
 
 	const user = await User.findByPk(userId);
@@ -66,6 +72,9 @@ exports.getUser = catchAsync(async (req, res, next) => {
 });
 
 exports.createUser = catchAsync(async (req, res, next) => {
+	// #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint for creating new warehouse user.'
+
     const { error } = validate(req.body);
 	if (error) return next(new AppError(error.message, 400));
 
@@ -86,6 +95,9 @@ exports.createUser = catchAsync(async (req, res, next) => {
 });
 
 exports.updateUser = catchAsync(async (req, res, next) => {
+	// #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint for updating warehouse user by its Id.'
+
 	const userId = +req.params.id;
 
 	const user = await User.update(req.body, { where: { userId }});
@@ -101,6 +113,9 @@ exports.updateUser = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteUser = catchAsync(async (req, res, next) => {
+	// #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint for deleting warehouse user by its Id.'
+
     const userId = +req.params.id;
 
 	const user = await User.destroy({ where: { userId }});
@@ -116,6 +131,9 @@ exports.deleteUser = catchAsync(async (req, res, next) => {
 });
 
 exports.createSuperAdmin = catchAsync(async (req, res, next) => {
+	// #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint for creating super admin.'
+
 	const { error } = validateAdmin(req.body);
 	if (error) return next(new AppError(error.message, 400));
 

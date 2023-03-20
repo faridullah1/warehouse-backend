@@ -4,14 +4,20 @@
   "description": "The aim of the mobile app is to exchange pictures of incoming/outgoing goods with the colleagues in the office.",
   "main": "server.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node swagger.js",
     "seed": "node seed.js",
-    "dev": "nodemon index.js"
+    "dev": "nodemon swagger.js",
+    "swagger-autogen": "node ./swagger.js"
   },
   "keywords": [
     "backend",
     "NodeJS"
   ],
+  "nodemonConfig": {
+    "ignore": [
+      "swagger-output.json"
+    ]
+  },
   "author": "Farid ullah",
   "license": "ISC",
   "dependencies": {
@@ -27,5 +33,9 @@
     "multer": "^1.4.5-lts.1",
     "pg": "^8.10.0",
     "sequelize": "^6.29.0"
+  },
+  "devDependencies": {
+    "swagger-autogen": "^2.23.1",
+    "swagger-ui-express": "^4.6.2"
   }
 }

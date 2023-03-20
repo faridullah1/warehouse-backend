@@ -5,6 +5,9 @@ const AppError = require("../utils/appError");
 const catchAsync = require('../utils/catchAsync');
 
 exports.getAllDepartments = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Department']
+    // #swagger.description = 'Endpoint for getting all departments'
+
     const departments = await Department.findAll();
 
     res.status(200).json({
@@ -16,6 +19,9 @@ exports.getAllDepartments = catchAsync(async (req, res, next) => {
 });
 
 exports.createDepartment = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Department']
+    // #swagger.description = 'Endpoint for creating new department'
+
     const { name } = req.body;
 
 	const department = await Department.create({ name });
@@ -29,6 +35,9 @@ exports.createDepartment = catchAsync(async (req, res, next) => {
 });
 
 exports.deleteDepartment = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['Department']
+    // #swagger.description = 'Endpoint for deleting a department by its Id.'
+
     const departmentId = +req.params.id;
 
 	const department = await Department.destroy({ where: { departmentId }});

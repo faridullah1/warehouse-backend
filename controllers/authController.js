@@ -11,6 +11,9 @@ const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
 exports.login = catchAsync(async (req, res, next) => {
+	// #swagger.tags = ['Auth']
+    // #swagger.description = 'Endpoint for Sign In Warehouse personnel. There are 2 types of users for this application, Admin and Warehouse_Personnel'
+
 	const { error } = validate(req.body);
 	if (error) return next(new AppError(error.message, 400));
 
