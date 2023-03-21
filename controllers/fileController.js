@@ -85,6 +85,7 @@ exports.createFile = catchAsync(async (req, res, next) => {
 
         if (isDamaged) {
             file.noOfDamagedGoods = req.files.length;
+            await file.save();
         }
 	}
 
