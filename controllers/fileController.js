@@ -76,12 +76,16 @@ exports.createFile = catchAsync(async (req, res, next) => {
     // #swagger.description = 'Endpoint for creating new File. File has a reference number and can contain multiple pictures'
 
     const { reference, isDamaged, containerNumber } = req.body;
-	const file = await File.create({ reference, isDamaged, containerNumber, userId: req.user.userId });
+	const file = await File.create({ reference, containerNumber, userId: req.user.userId });
 
     if (req.files) {
 		const promises = [];
 		req.files.forEach(file => promises.push(uploadToS3(file, '')));
 		req.body.pictures = await Promise.all(promises);
+
+        if (isDamaged) {
+            file.noOfDamagedGoods = req.files.length;
+        }
 	}
 
     for(let pic of req.body.pictures) {

@@ -23,9 +23,9 @@ const File = db.define('file',
 		}
 	},
 	containerNumber: Sequelize.STRING(100),
-	isDamaged: {
-		type: Sequelize.BOOLEAN,
-		defaultValue: false
+	noOfDamagedGoods: {
+		type: Sequelize.INTEGER,
+		defaultValue: 0
 	},
 	userId: {
 		type: Sequelize.INTEGER,
