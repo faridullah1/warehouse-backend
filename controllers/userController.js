@@ -7,6 +7,24 @@ const { User, validate } = require("../models/userModel");
 const AppError = require("../utils/appError");
 const catchAsync = require('../utils/catchAsync');
 
+exports.me = catchAsync(async (req, res, next) => {
+	// #swagger.tags = ['User']
+    // #swagger.description = 'Endpoint for getting logged in user profile.'
+
+	const user = await User.findByPk(req.user.userId, 
+		{ include: [{ model: Department, attributes: ['departmentId', 'name']} ]}
+	);
+
+    if (!user) return next(new AppError('user with the given id not found', 404));
+
+    res.status(200).json({
+        status: 'success',
+        data: { 
+            user
+        }
+    });
+});
+
 exports.getAllUsers = catchAsync(async (req, res, next) => {
 	// #swagger.tags = ['User']
     // #swagger.description = 'Endpoint for getting all warehouse users. You can filter results by name'
