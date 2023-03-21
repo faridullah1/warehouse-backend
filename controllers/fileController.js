@@ -101,6 +101,38 @@ exports.createFile = catchAsync(async (req, res, next) => {
     });
 });
 
+exports.updateFile = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['File']
+    // #swagger.description = 'Endpoint for adding new pictues to an existing file.'
+
+    const fileId = +req.params.id;
+    const file = await File.findByPk(fileId);
+
+    if (!file) return next(new AppError('user with the given id not found', 404));
+
+    if (req.files) {
+		const promises = [];
+		req.files.forEach(file => promises.push(uploadToS3(file, '')));
+		req.body.pictures = await Promise.all(promises);
+	}
+
+    for(let url of req.body.pictures) {
+    	await FileImage.create({url, fileId });
+    }
+
+    if (req.body.isDamaged) {
+        file.noOfDamagedGoods += req.files.length;
+        await file.save();
+    }
+
+    res.status(200).json({
+        status: 'success',
+        data: { 
+            file
+        }
+    });
+});
+
 exports.deleteFile = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['File']
     // #swagger.description = 'Endpoint for deleting a file by its Id.'
