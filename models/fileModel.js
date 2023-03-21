@@ -22,6 +22,7 @@ const File = db.define('file',
 			}
 		}
 	},
+	containerNumber: Sequelize.STRING(100),
 	isDamaged: {
 		type: Sequelize.BOOLEAN,
 		defaultValue: false

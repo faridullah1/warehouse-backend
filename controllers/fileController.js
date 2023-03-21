@@ -75,8 +75,8 @@ exports.createFile = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['File']
     // #swagger.description = 'Endpoint for creating new File. File has a reference number and can contain multiple pictures'
 
-    const { reference, isDamaged } = req.body;
-	const file = await File.create({ reference, isDamaged, userId: req.user.userId });
+    const { reference, isDamaged, containerNumber } = req.body;
+	const file = await File.create({ reference, isDamaged, containerNumber, userId: req.user.userId });
 
     if (req.files) {
 		const promises = [];
