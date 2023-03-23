@@ -83,7 +83,7 @@ exports.createFile = catchAsync(async (req, res, next) => {
 		req.files.forEach(file => promises.push(uploadToS3(file, '')));
 		req.body.pictures = await Promise.all(promises);
 
-        if (isDamaged) {
+        if (isDamaged === "true") {
             file.noOfDamagedGoods = req.files.length;
             await file.save();
         }
