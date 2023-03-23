@@ -83,10 +83,17 @@ exports.createFile = catchAsync(async (req, res, next) => {
 		req.files.forEach(file => promises.push(uploadToS3(file, '')));
 		req.body.pictures = await Promise.all(promises);
 
+        console.log('==================================================');
+        console.log('Is Damaged =', isDamaged);
+        console.log('Type of Is Damaged =', typeof isDamaged);
+
         if (isDamaged === "true") {
+            console.log('.........Goods are damaged........')
             file.noOfDamagedGoods = req.files.length;
             await file.save();
         }
+
+        console.log('==================================================');
 	}
 
     for(let pic of req.body.pictures) {
