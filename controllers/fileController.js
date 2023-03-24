@@ -127,9 +127,15 @@ exports.updateFile = catchAsync(async (req, res, next) => {
     	await FileImage.create({url, fileId });
     }
 
-    if (req.body.isDamaged) {
+    console.log('========================PATCH CASE =========================');
+    console.log('Is Damaged =', req.body.isDamaged);
+    console.log('Type of Is Damaged =', typeof req.body.isDamaged);
+
+    if (req.body.isDamaged === "true") {
+        console.log('PATCH CASE .........Goods are damaged........')
         file.noOfDamagedGoods += req.files.length;
         await file.save();
+        console.log('==================================================');
     }
 
     res.status(200).json({
