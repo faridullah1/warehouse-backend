@@ -1,4 +1,5 @@
 const multer = require('multer');
+const { Op } = require('sequelize');
 const { FileImage } = require('../models/fileImageModel');
 
 const { File } = require("../models/fileModel");
@@ -15,9 +16,13 @@ exports.uploadFilePictures = upload.array('pictures', 100);
 
 exports.me = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['File']
-    // #swagger.description = 'Endpoint for getting all files created by currently logged in user'
+    // #swagger.description = 'Endpoint for getting all files created by currently logged in user since last 7 days'
+
+    const lastSevenDays = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
 
     const files = await File.findAll({
+        where: { createdAt: { [Op.gte]: lastSevenDays } },
+
         include: [
             {
                 model: User,

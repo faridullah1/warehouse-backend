@@ -13,6 +13,6 @@ router.route('/')
 
 router.route('/:id')
     .patch(auth, restrictTo('Warehouse_Personnel'), fileController.uploadFilePictures, fileController.updateFile)
-    .delete(auth, restrictTo('Warehouse_Personnel'), fileController.deleteFile);
+    .delete(auth, restrictTo('Super_Admin'), fileController.deleteFile);
     
 module.exports = router;
