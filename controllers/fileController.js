@@ -83,17 +83,10 @@ exports.createFile = catchAsync(async (req, res, next) => {
 		req.files.forEach(file => promises.push(uploadToS3(file, '')));
 		req.body.pictures = await Promise.all(promises);
 
-        console.log('==================================================');
-        console.log('Is Damaged =', isDamaged);
-        console.log('Type of Is Damaged =', typeof isDamaged);
-
         if (isDamaged === "true") {
-            console.log('.........Goods are damaged........')
             file.noOfDamagedGoods = req.files.length;
             await file.save();
         }
-
-        console.log('==================================================');
 	}
 
     for(let pic of req.body.pictures) {
@@ -127,15 +120,9 @@ exports.updateFile = catchAsync(async (req, res, next) => {
     	await FileImage.create({url, fileId });
     }
 
-    console.log('========================PATCH CASE =========================');
-    console.log('Is Damaged =', req.body.isDamaged);
-    console.log('Type of Is Damaged =', typeof req.body.isDamaged);
-
     if (req.body.isDamaged === "true") {
-        console.log('PATCH CASE .........Goods are damaged........')
         file.noOfDamagedGoods += req.files.length;
         await file.save();
-        console.log('==================================================');
     }
 
     res.status(200).json({
