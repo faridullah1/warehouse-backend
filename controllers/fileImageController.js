@@ -7,7 +7,7 @@ exports.getAllFileImages = catchAsync(async (req, res, next) => {
     // #swagger.description = 'Endpoint for getting all pictures created so far'
 
     const pictures = await FileImage.findAll({
-        attributes: ['url', 'createdAt'],
+        attributes: ['fileImageId', 'url', 'createdAt'],
         order: [
             ['createdAt', 'DESC']
         ]
