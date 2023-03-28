@@ -76,7 +76,7 @@ exports.getAllFiles = catchAsync(async (req, res, next) => {
             },
             {
                 model: FileImage,
-                attributes: ['url', 'createdAt']
+                attributes: ['fileImageId', 'url', 'createdAt']
             }
         ],
         order: [

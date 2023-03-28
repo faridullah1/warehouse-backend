@@ -8,4 +8,7 @@ const { restrictTo } = require('../middlewares/permissions');
 router.route('/')
     .get(auth, restrictTo('Super_Admin'), fileImageController.getAllFileImages)
 
+router.route('/:id')
+    .delete(auth, restrictTo('Super_Admin'), fileImageController.deleteFileImage)
+
 module.exports = router;
