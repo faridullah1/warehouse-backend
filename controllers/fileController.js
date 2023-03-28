@@ -51,7 +51,23 @@ exports.getAllFiles = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['File']
     // #swagger.description = 'Endpoint for getting all files.'
 
+    const { reference, createdAt, isDamaged } = req.query;
+    const where = {};
+
+    if (reference) {
+        where['reference'] = { [Op.like]: '%' + reference + '%' }
+    }
+
+    if (isDamaged) {
+        where['noOfDamagedGoods'] = { [Op.gt]: 0 }
+    }
+
+    if (createdAt) {
+        where['createdAt'] = { [Op.gt]: new Date(createdAt['gt']), [Op.lt]: new Date(createdAt['lt']) };
+    }
+
     const files = await File.findAll({
+        where,
         include: [
             {
                 model: User,
