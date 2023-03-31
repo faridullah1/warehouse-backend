@@ -8,6 +8,16 @@ const AppError = require("../utils/appError");
 const catchAsync = require('../utils/catchAsync');
 const uploadToS3 = require('../utils/s3Upload');
 
+const containerNumberCharDict = {
+    'a': 10, 'b': 12, 'c': 13, 'd': 14,
+    'e': 15, 'f': 16, 'g': 17, 'h': 18,
+    'i': 19, 'j': 20, 'k': 21, 'l': 23,
+    'm': 24, 'n': 25, 'o': 26, 'p': 27,
+    'q': 28, 'r': 29, 's': 30, 't': 31,
+    'u': 32, 'v': 34, 'w': 35, 'x': 36,
+    'y': 37, 'z': 38
+};
+
 const upload = multer({
 	dest: 'temp/'
 });
@@ -92,12 +102,40 @@ exports.getAllFiles = catchAsync(async (req, res, next) => {
     });
 });
 
+checkContainerNumberValidity = (containerNumber) => {
+    const [characters, digits] = containerNumber.split(' ');
+    const [firstSixDigits, lastDigitToCheck] = digits.split('-'); 
+
+    let sum = 0;
+    let counter = 0;
+
+    for (const char of characters) {
+        sum += containerNumberCharDict[char.toLowerCase()] * Math.pow(2, counter);
+        counter += 1;
+    }
+    
+    for (const digit of firstSixDigits) {
+        sum += parseInt(digit, 10) * Math.pow(2, counter);
+        counter += 1;
+    }
+
+    const result = Math.trunc(sum / 11);
+    const finalResult = result * 11;
+    const lastDigit = sum - finalResult;
+
+    return lastDigit == lastDigitToCheck
+};
+
 exports.createFile = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['File']
     // #swagger.description = 'Endpoint for creating new File. File has a reference number and can contain multiple pictures'
 
     const { reference, isDamaged, containerNumber } = req.body;
 	const file = await File.create({ reference, containerNumber, userId: req.user.userId });
+
+    if (!checkContainerNumberValidity(containerNumber)) {
+        return next(new AppError('Invalid container number', 400));
+    }
 
     if (req.files) {
 		const promises = [];

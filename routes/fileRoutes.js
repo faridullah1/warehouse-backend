@@ -12,7 +12,7 @@ router.route('/')
     .post(auth, restrictTo('Warehouse_Personnel'), fileController.uploadFilePictures, fileController.createFile);
 
 router.route('/:id')
-    .patch(auth, restrictTo('Warehouse_Personnel'), fileController.uploadFilePictures, fileController.updateFile)
+    .patch(auth, restrictTo('Super_Admin', 'Warehouse_Personnel'), fileController.uploadFilePictures, fileController.updateFile)
     .delete(auth, restrictTo('Super_Admin'), fileController.deleteFile);
     
 module.exports = router;
