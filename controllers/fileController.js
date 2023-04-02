@@ -145,6 +145,12 @@ exports.createFile = catchAsync(async (req, res, next) => {
     if (!checkContainerNumberValidity(containerNumber)) {
         return next(new AppError('Invalid container number', 400));
     }
+    
+    if (containerNumber) {
+        if (!checkContainerNumberValidity(containerNumber)) {
+            return next(new AppError('Invalid container number', 400));
+        }   
+    }
 
     if (req.files.length === 0) {
         return next(new AppError('Upload atlease one image', 400));
