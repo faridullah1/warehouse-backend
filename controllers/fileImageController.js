@@ -6,7 +6,14 @@ exports.getAllFileImages = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['FileImage']
     // #swagger.description = 'Endpoint for getting all pictures created so far'
 
-    const pictures = await FileImage.findAll({
+    const page = +req.query.page || 1;
+	const limit = +req.query.limit || 10;
+
+    const offset = (page - 1) * limit;
+
+    const pictures = await FileImage.findAndCountAll({
+        limit,
+        offset,
         attributes: ['fileImageId', 'url', 'createdAt'],
         order: [
             ['createdAt', 'DESC']
