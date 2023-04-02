@@ -24,6 +24,7 @@ const upload = multer({
 
 exports.uploadFilePictures = upload.array('pictures', 100);
 
+// This endpoint is used by warehouse personnel to see his/her files uploaded since last seven days on mobile app.
 exports.me = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['File']
     // #swagger.description = 'Endpoint for getting all files created by currently logged in user since last 7 days'
@@ -57,9 +58,13 @@ exports.me = catchAsync(async (req, res, next) => {
     });
 });
 
+
+// This endpoint is used by admin to see all files on portal.
 exports.getAllFiles = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['File']
     // #swagger.description = 'Endpoint for getting all files.'
+    const page = +req.query.page || 1;
+	const limit = +req.query.limit || 10;
 
     const { reference, createdAt, isDamaged } = req.query;
     const where = {};
@@ -76,8 +81,12 @@ exports.getAllFiles = catchAsync(async (req, res, next) => {
         where['createdAt'] = { [Op.gt]: new Date(createdAt['gt']), [Op.lt]: new Date(createdAt['lt']) };
     }
 
-    const files = await File.findAll({
+    const offset = (page - 1) * limit;
+
+    const files = await File.findAndCountAll({
         where,
+        offset,
+        limit,
         include: [
             {
                 model: User,
@@ -89,6 +98,7 @@ exports.getAllFiles = catchAsync(async (req, res, next) => {
                 attributes: ['fileImageId', 'url', 'createdAt']
             }
         ],
+        distinct: true,
         order: [
             ['createdAt', 'DESC']
         ]
