@@ -142,10 +142,6 @@ exports.createFile = catchAsync(async (req, res, next) => {
 
     const { reference, isDamaged, containerNumber } = req.body;
 
-    if (!checkContainerNumberValidity(containerNumber)) {
-        return next(new AppError('Invalid container number', 400));
-    }
-    
     if (containerNumber) {
         if (!checkContainerNumberValidity(containerNumber)) {
             return next(new AppError('Invalid container number', 400));
