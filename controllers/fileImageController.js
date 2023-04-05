@@ -1,4 +1,5 @@
 const { FileImage } = require('../models/fileImageModel');
+const { File } = require('../models/fileModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -14,6 +15,10 @@ exports.getAllFileImages = catchAsync(async (req, res, next) => {
     const pictures = await FileImage.findAndCountAll({
         limit,
         offset,
+        include: [{
+            model: File,
+            attributes: ['reference', 'containerNumber']
+        }],
         attributes: ['fileImageId', 'url', 'createdAt'],
         order: [
             ['createdAt', 'DESC']
