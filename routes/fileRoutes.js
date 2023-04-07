@@ -9,10 +9,11 @@ router.route('/me').get(auth, fileController.me);
     
 router.route('/')
     .get(auth, restrictTo('Super_Admin'), fileController.getAllFiles)
-    .post(auth, restrictTo('Warehouse_Personnel'), fileController.uploadFilePictures, fileController.createFile);
+    .post(auth, fileController.uploadFilePictures, fileController.createFile);
 
 router.route('/:id')
-    .patch(auth, restrictTo('Super_Admin', 'Warehouse_Personnel'), fileController.uploadFilePictures, fileController.updateFile)
+    .get(auth, fileController.getFile)
+    .patch(auth, fileController.uploadFilePictures, fileController.updateFile)
     .delete(auth, restrictTo('Super_Admin'), fileController.deleteFile);
     
 module.exports = router;

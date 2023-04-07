@@ -1,5 +1,6 @@
 const { FileImage } = require('../models/fileImageModel');
 const { File } = require('../models/fileModel');
+const { User } = require('../models/userModel');
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
 
@@ -17,6 +18,10 @@ exports.getAllFileImages = catchAsync(async (req, res, next) => {
         offset,
         include: [{
             model: File,
+            include: [{
+                model: User,
+                attributes: ['name']
+            }],
             attributes: ['reference', 'containerNumber']
         }],
         attributes: ['fileImageId', 'url', 'createdAt'],

@@ -114,6 +114,11 @@ exports.getAllFiles = catchAsync(async (req, res, next) => {
 
 checkContainerNumberValidity = (containerNumber) => {
     const [characters, digits] = containerNumber.split(' ');
+
+    if (!digits || !characters) {
+        return false;
+    }
+
     const [firstSixDigits, lastDigitToCheck] = digits.split('-'); 
 
     let sum = 0;
@@ -136,20 +141,38 @@ checkContainerNumberValidity = (containerNumber) => {
     return lastDigit == lastDigitToCheck
 };
 
+exports.getFile = catchAsync(async (req, res, next) => {
+    // #swagger.tags = ['File']
+    // #swagger.description = 'Endpoint for getting a single file by id.'
+
+    const fileId = +req.params.id;
+    const file = await File.findByPk(fileId, { attributes: ['fileId', 'reference', 'containerNumber']});
+
+    if (!file) return next(new AppError('user with the given id not found', 404));
+
+    res.status(200).json({
+        status: 'success',
+        data: { 
+            file
+        }
+    });
+});
+
+
 exports.createFile = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['File']
     // #swagger.description = 'Endpoint for creating new File. File has a reference number and can contain multiple pictures'
 
     const { reference, isDamaged, containerNumber } = req.body;
 
+    if (req.files.length === 0) {
+        return next(new AppError('Upload atlease one image', 400));
+    }
+
     if (containerNumber) {
         if (!checkContainerNumberValidity(containerNumber)) {
             return next(new AppError('Invalid container number', 400));
         }   
-    }
-
-    if (req.files.length === 0) {
-        return next(new AppError('Upload atlease one image', 400));
     }
 
 	const file = await File.create({ reference, containerNumber, userId: req.user.userId });
@@ -179,24 +202,30 @@ exports.updateFile = catchAsync(async (req, res, next) => {
     // #swagger.tags = ['File']
     // #swagger.description = 'Endpoint for adding new pictues to an existing file.'
 
+    const { reference, containerNumber } = req.body;
+
     const fileId = +req.params.id;
-    const file = await File.findByPk(fileId);
+    let file = await File.findByPk(fileId);
 
     if (!file) return next(new AppError('user with the given id not found', 404));
 
-    if (req.files) {
-		const promises = [];
-		req.files.forEach(file => promises.push(uploadToS3(file, '')));
-		req.body.pictures = await Promise.all(promises);
-	}
+    if (req.files && req.files.length > 0) {
+        const promises = [];
+        req.files.forEach(file => promises.push(uploadToS3(file, '')));
+        const urls = await Promise.all(promises);
+    
+        for(let url of urls) {
+            await FileImage.create({url, fileId });
+        }
 
-    for(let url of req.body.pictures) {
-    	await FileImage.create({url, fileId });
+        if (req.body.isDamaged === "true") {
+            file.noOfDamagedGoods += req.files.length;
+            await file.save();
+        }
     }
 
-    if (req.body.isDamaged === "true") {
-        file.noOfDamagedGoods += req.files.length;
-        await file.save();
+    if (reference, containerNumber) {
+        file = await File.update(req.body, { where: { fileId }});
     }
 
     res.status(200).json({
