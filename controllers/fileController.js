@@ -151,7 +151,14 @@ exports.getFile = catchAsync(async (req, res, next) => {
     // #swagger.description = 'Endpoint for getting a single file by id.'
 
     const fileId = +req.params.id;
-    const file = await File.findByPk(fileId, { attributes: ['fileId', 'reference', 'containerNumber']});
+    const file = await File.findByPk(fileId, 
+        {   include: [
+                {
+                    model: FileImage,
+                    attributes: ['fileImageId', 'url', 'createdAt']
+                }
+            ],
+        });
 
     if (!file) return next(new AppError('user with the given id not found', 404));
 

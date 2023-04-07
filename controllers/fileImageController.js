@@ -22,7 +22,7 @@ exports.getAllFileImages = catchAsync(async (req, res, next) => {
                 model: User,
                 attributes: ['name']
             }],
-            attributes: ['reference', 'containerNumber']
+            attributes: ['fileId', 'reference', 'containerNumber']
         }],
         attributes: ['fileImageId', 'url', 'createdAt'],
         order: [
