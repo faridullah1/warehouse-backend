@@ -67,10 +67,15 @@ exports.getAllFiles = catchAsync(async (req, res, next) => {
 	const limit = +req.query.limit || 10;
 
     const { reference, createdAt, isDamaged } = req.query;
-    const where = {};
+    let where = {};
 
     if (reference) {
-        where['reference'] = { [Op.like]: '%' + reference + '%' }
+        where = {
+            [Op.or]: [
+                { reference: { [Op.like]: '%' + reference + '%' } }, 
+                { containerNumber: { [Op.like]: '%' + reference + '%' } }
+            ],   
+        }
     }
 
     if (isDamaged) {
