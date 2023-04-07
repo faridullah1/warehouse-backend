@@ -25,9 +25,10 @@ createSuperAdmins = async () => {
 
         const user = { 
             name: `Admin ${i+1}`, 
-            email: `admin${i+1}@gmail.com`, 
+            email: `admin${i+1}@gmail.com`,
+            username: `admin${i+1}`,
             password: encryptedPassword, 
-            type: 'Super_Admin', 
+            type: 'Admin', 
             departmentId: i+1 
         };
 
@@ -44,7 +45,8 @@ createWarehousePersonnel = async () => {
             name: `User ${i+1}`, 
             email: `user${i+1}@gmail.com`, 
             password: encryptedPassword, 
-            type: 'Warehouse_Personnel', 
+            type: 'Warehouse_Personnel',
+            username: `user${i+1}`,
             departmentId: i+1
         };
 

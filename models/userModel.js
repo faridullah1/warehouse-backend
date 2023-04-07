@@ -21,6 +21,16 @@ const User = db.define('user',
 			}
 		}
 	},
+	username: {
+		type: Sequelize.STRING(50),
+		allowNull: false,
+		unique: true,
+        validate: {
+			notNull: {
+				msg: 'Username is required'
+			}
+		}
+	},
 	email: {
 		type: Sequelize.STRING(255),
 		allowNull: false,
@@ -44,7 +54,7 @@ const User = db.define('user',
 		}
 	},
 	type: {
-		type: Sequelize.ENUM("Super_Admin", "Admin", "Warehouse_Personnel"),
+		type: Sequelize.ENUM("Admin", "Warehouse_Personnel"),
 		allowNull: false,
 		defaultValue: "Warehouse_Personnel",
         validate: {
@@ -71,6 +81,7 @@ const User = db.define('user',
 function validateUser(user) {
 	const schema = Joi.object({
 		name: Joi.string().required().min(3).max(100),
+		username: Joi.string().required().max(50),
 		email: Joi.string().required().email().max(255),
 		password: Joi.string().required().min(8).max(100),
 		type: Joi.string().valid(...User.getAttributes().type.values),

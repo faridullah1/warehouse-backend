@@ -152,7 +152,8 @@ exports.getFile = catchAsync(async (req, res, next) => {
 
     const fileId = +req.params.id;
     const file = await File.findByPk(fileId, 
-        {   include: [
+        {   
+            include: [
                 {
                     model: FileImage,
                     attributes: ['fileImageId', 'url', 'createdAt']

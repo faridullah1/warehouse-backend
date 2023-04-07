@@ -6,9 +6,9 @@ const { auth } = require('../middlewares/auth');
 const { restrictTo } = require('../middlewares/permissions');
 
 router.route('/')
-    .get(auth, restrictTo('Super_Admin'), fileImageController.getAllFileImages)
+    .get(auth, restrictTo('Admin'), fileImageController.getAllFileImages)
 
 router.route('/:id')
-    .delete(auth, restrictTo('Super_Admin'), fileImageController.deleteFileImage)
+    .delete(auth, restrictTo('Admin'), fileImageController.deleteFileImage)
 
 module.exports = router;

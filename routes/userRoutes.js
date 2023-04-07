@@ -8,7 +8,7 @@ const { restrictTo } = require('../middlewares/permissions');
 router.route('/createSuperAdmin').post(userController.createSuperAdmin);
 router.route('/me').get(auth, userController.me);
 
-router.use(auth, restrictTo('Super_Admin'));
+router.use(auth, restrictTo('Admin'));
 
 router.route('/')
     .get(userController.getAllUsers)

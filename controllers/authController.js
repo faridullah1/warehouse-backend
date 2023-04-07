@@ -40,7 +40,7 @@ exports.adminLogin = catchAsync(async (req, res, next) => {
 	let user = await User.findOne({ 
 		where: {
 			email: req.body.email,
-			type: 'Super_Admin' 
+			type: 'Admin' 
 		},
 		attributes: ['userId', 'name', 'email', 'password', 'type']
 	});
