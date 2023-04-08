@@ -63,6 +63,11 @@ const User = db.define('user',
 			}
 		}
 	},
+	language: {
+		type: Sequelize.ENUM("en", "dutch"),
+		allowNull: false,
+		defaultValue: "en",
+	},
 	departmentId: {
 		type: Sequelize.INTEGER,
 		allowNull: false,
@@ -85,6 +90,7 @@ function validateUser(user) {
 		email: Joi.string().required().email().max(255),
 		password: Joi.string().required().min(8).max(100),
 		type: Joi.string().valid(...User.getAttributes().type.values),
+		language: Joi.string().valid(...User.getAttributes().language.values),
 		departmentId: Joi.number().required(),
 	});
 

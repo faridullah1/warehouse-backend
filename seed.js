@@ -29,6 +29,7 @@ createSuperAdmins = async () => {
             username: `admin${i+1}`,
             password: encryptedPassword, 
             type: 'Admin', 
+            language: 'en',
             departmentId: i+1 
         };
 
@@ -46,6 +47,7 @@ createWarehousePersonnel = async () => {
             email: `user${i+1}@gmail.com`, 
             password: encryptedPassword, 
             type: 'Warehouse_Personnel',
+            language: 'en',
             username: `user${i+1}`,
             departmentId: i+1
         };

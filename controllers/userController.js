@@ -96,7 +96,7 @@ exports.createUser = catchAsync(async (req, res, next) => {
     const { error } = validate(req.body);
 	if (error) return next(new AppError(error.message, 400));
 
-    const { name, username, email, password, type } = req.body;
+    const { name, username, email, password, type, language } = req.body;
 
 	const salt = await bcrypt.genSalt(10);
 	const encryptedPassword = await bcrypt.hash(password, salt);
@@ -106,7 +106,8 @@ exports.createUser = catchAsync(async (req, res, next) => {
 		username, 
 		email, 
 		password: encryptedPassword, 
-		type, 
+		type,
+		language,
 		departmentId: req.user.departmentId 
 	});
 	delete user.dataValues.password;
