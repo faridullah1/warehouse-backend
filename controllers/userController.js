@@ -163,13 +163,14 @@ exports.createSuperAdmin = catchAsync(async (req, res, next) => {
 	const { error } = validateAdmin(req.body);
 	if (error) return next(new AppError(error.message, 400));
 
-	const { name, email, password, departmentId } = req.body;
+	const { name, username, email, password, departmentId } = req.body;
 
 	const salt = await bcrypt.genSalt(10);
 	const encryptedPassword = await bcrypt.hash(password, salt);
 
 	const user = await User.create({ 
-		name, 
+		name,
+		username,
 		email, 
 		password: encryptedPassword,
 		type: 'Admin',
@@ -188,6 +189,7 @@ exports.createSuperAdmin = catchAsync(async (req, res, next) => {
 validateAdmin = (user) => {
 	const schema = Joi.object({
         name: Joi.string().required().min(3).max(100),
+		username: Joi.string().required().max(50),
 		email: Joi.string().required().email().max(255),
 		password: Joi.string().required().min(8).max(100),
 		type: Joi.string().valid('Admin'),
