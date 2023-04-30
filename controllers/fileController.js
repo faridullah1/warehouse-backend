@@ -237,7 +237,13 @@ exports.updateFile = catchAsync(async (req, res, next) => {
         }
     }
 
-    if (reference, containerNumber) {
+    if (reference || containerNumber) {
+        if (containerNumber) {
+            if (!checkContainerNumberValidity(containerNumber)) {
+                return next(new AppError('Invalid container number', 400));
+            }   
+        }
+
         file = await File.update(req.body, { where: { fileId }});
     }
 
