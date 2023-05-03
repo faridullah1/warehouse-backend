@@ -13,13 +13,19 @@ const sendErrorProd = (err, res) => {
 	if (err.name) {
 		switch(err.name) {
             case 'SequelizeValidationError':
-				errorMessage = err.errors[0].message;
                 err.statusCode = 400;
+				errorMessage = err.errors[0].message;
 				break;
 
 			case 'SequelizeUniqueConstraintError':
+                err.statusCode = 400;
 				const field = Object.entries(err.fields);
 				errorMessage = `${field[0][0]} already exists`;
+				break;
+
+			case 'MulterError':
+				err.statusCode = 400;
+				errorMessage = 'File(s) is too large, maximum allowed size is 100MB'
 				break;
 
 			case 'JsonWebTokenError':

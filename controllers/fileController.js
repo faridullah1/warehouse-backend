@@ -19,7 +19,8 @@ const containerNumberCharDict = {
 };
 
 const upload = multer({
-	dest: 'temp/'
+	dest: 'temp/',
+    limits: { fileSize: 100 * 1024 * 1024 },
 });
 
 exports.uploadFilePictures = upload.array('pictures', 100);
