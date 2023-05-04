@@ -185,7 +185,9 @@ exports.createFile = catchAsync(async (req, res, next) => {
 
     if (containerNumber) {
         if (!checkContainerNumberValidity(containerNumber)) {
-            return next(new AppError('Invalid container number', 400));
+            const user = await User.findByPk(req.user.userId);
+            const errorMessage = user.dataValues.language === 'dutch' ? 'Ongeldig containernummer' : 'Invalid container number';
+            return next(new AppError(errorMessage, 400));
         }   
     }
 
