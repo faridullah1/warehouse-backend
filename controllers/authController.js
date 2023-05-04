@@ -9,6 +9,7 @@ const { User } = require('../models/userModel');
 // Utils
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
+const { Op } = require('sequelize');
 
 exports.login = catchAsync(async (req, res, next) => {
 	// #swagger.tags = ['Auth']
@@ -17,7 +18,20 @@ exports.login = catchAsync(async (req, res, next) => {
 	const { error } = validate(req.body);
 	if (error) return next(new AppError(error.message, 400));
 
-	let user = await User.findOne({ where: { email: req.body.email }, attributes: ['userId', 'name', 'email', 'password'] });
+	const where = {};
+
+	if (req.body.hasOwnProperty('username')) {
+		where.username = req.body.username
+	}
+	else {
+		where.email = req.body.email
+	}
+	
+	let user = await User.findOne({ 
+		where, 
+		attributes: ['userId', 'name', 'email', 'password'] 
+	});
+
 	if (!user) return next(new AppError('Invalid email or password.', 400));
 
 	const isValid = await bcrypt.compare(req.body.password, user.password);
@@ -62,7 +76,8 @@ exports.adminLogin = catchAsync(async (req, res, next) => {
 
 function validate(req) {
 	const schema = Joi.object({
-		email: Joi.string().email().required(),
+		email: Joi.string().email(),
+		username: Joi.string(),
 		password: Joi.string().required()
 	});
 
