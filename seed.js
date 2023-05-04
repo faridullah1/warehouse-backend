@@ -46,7 +46,7 @@ createWarehousePersonnel = async () => {
             name: `User ${i+1}`, 
             email: `user${i+1}@gmail.com`, 
             password: encryptedPassword, 
-            type: 'Warehouse_Personnel',
+            type: 'User',
             language: 'en',
             username: `user${i+1}`,
             departmentId: i+1

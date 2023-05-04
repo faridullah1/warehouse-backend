@@ -54,9 +54,9 @@ const User = db.define('user',
 		}
 	},
 	type: {
-		type: Sequelize.ENUM("Admin", "Warehouse_Personnel"),
+		type: Sequelize.ENUM("Admin", "User"),
 		allowNull: false,
-		defaultValue: "Warehouse_Personnel",
+		defaultValue: "User",
         validate: {
 			notNull: {
 				msg: 'Type is required'

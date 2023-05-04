@@ -31,7 +31,7 @@ const doc = {
             name: "Farid",
             email: "farid@gmail.com",
             password: "tester123",
-            type: 'Warehouse_Personnel',
+            type: 'User',
             departmentId: 1
         },
         AddUser: {
