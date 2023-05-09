@@ -56,7 +56,7 @@ exports.adminLogin = catchAsync(async (req, res, next) => {
 			email: req.body.email,
 			type: 'Admin' 
 		},
-		attributes: ['userId', 'name', 'email', 'password', 'type']
+		attributes: ['userId', 'name', 'email', 'password', 'type', 'language']
 	});
 
 	if (!user) return next(new AppError('Invalid email or password.', 400));
@@ -64,9 +64,19 @@ exports.adminLogin = catchAsync(async (req, res, next) => {
 	const isValid = await bcrypt.compare(req.body.password, user.password);
 	if (!isValid) return next(new AppError('Invalid email or password.', 400));
 
-	const token  = jwt.sign({ userId: user.userId, name: user.name, email: user.email, type: user.type }, process.env.JWT_PRIVATE_KEY, {
+	const userData = {
+		userId: user.userId, 
+		name: user.name, 
+		email: user.email, 
+		type: user.type,
+		language: user.language
+	}
+	
+	const JWTOptions = {
 		expiresIn: process.env.JWT_EXPIRY
-	});
+	}
+
+	const token  = jwt.sign(userData, process.env.JWT_PRIVATE_KEY, JWTOptions);
 
 	res.status(200).json({
 		status: 'success',

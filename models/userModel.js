@@ -64,7 +64,7 @@ const User = db.define('user',
 		}
 	},
 	language: {
-		type: Sequelize.ENUM("en", "dutch"),
+		type: Sequelize.ENUM("en", "nl"),
 		allowNull: false,
 		defaultValue: "en",
 	},
