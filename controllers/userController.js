@@ -33,9 +33,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 	const limit = +req.query.limit || 10;
 	const search = req.query;
 
-    const where = {
-		userId: { [Op.ne]: req.user.userId }
-	};
+    const where = {};
 
 	for (let key in search) {
 		if (key === 'page' || key === 'limit') continue;
