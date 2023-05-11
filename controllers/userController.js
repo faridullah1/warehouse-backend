@@ -96,6 +96,16 @@ exports.createUser = catchAsync(async (req, res, next) => {
 
     const { name, username, email, password, type, language } = req.body;
 
+	if (type === 'Admin') {
+		const admin = await User.find({ where: { email }});
+		
+		if (admin) {
+			const user = await User.findByPk(req.user.userId);
+            const errorMessage = user.dataValues.language === 'nl' ? 'Fout: e-mailadres bestaat al' : 'email already exists';
+            return next(new AppError(errorMessage, 400));
+		}
+	}
+
 	const salt = await bcrypt.genSalt(10);
 	const encryptedPassword = await bcrypt.hash(password, salt);
 

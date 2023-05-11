@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../db');
 const { File } = require('./fileModel');
+const { User } = require('./userModel');
 
 const FileImage = db.define('file_image', 
 {
@@ -28,6 +29,15 @@ const FileImage = db.define('file_image',
 		references: {
 			model: File,
 			key: 'fileId',
+			onDelete: 'RESTRICT'
+		}
+	},
+	userId: {
+		type: Sequelize.INTEGER,
+		allowNull: false,
+		references: {
+			model: User,
+			key: 'userId',
 			onDelete: 'RESTRICT'
 		}
 	},

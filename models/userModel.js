@@ -34,7 +34,6 @@ const User = db.define('user',
 	email: {
 		type: Sequelize.STRING(255),
 		allowNull: false,
-		unique: true,
         validate: {
 			notNull: {
 				msg: 'Email is required'
