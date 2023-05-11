@@ -203,7 +203,7 @@ exports.createFile = catchAsync(async (req, res, next) => {
     }
 
     for(let pic of req.body.pictures) {
-    	await FileImage.create({url: pic, fileId: file.dataValues.fileId });
+    	await FileImage.create({url: pic, fileId: file.dataValues.fileId, userId: req.user.userId });
     }
 
     res.status(201).json({
@@ -231,7 +231,7 @@ exports.updateFile = catchAsync(async (req, res, next) => {
         const urls = await Promise.all(promises);
     
         for(let url of urls) {
-            await FileImage.create({url, fileId });
+            await FileImage.create({ url, fileId, userId: req.user.userId });
         }
 
         if (req.body.isDamaged === "true") {

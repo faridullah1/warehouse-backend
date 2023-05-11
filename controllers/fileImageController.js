@@ -16,14 +16,17 @@ exports.getAllFileImages = catchAsync(async (req, res, next) => {
     const pictures = await FileImage.findAndCountAll({
         limit,
         offset,
-        include: [{
-            model: File,
-            include: [{
+        include: 
+        [
+            {
+                model: File,
+                attributes: ['fileId', 'reference', 'containerNumber']
+            },
+            {
                 model: User,
                 attributes: ['name']
-            }],
-            attributes: ['fileId', 'reference', 'containerNumber']
-        }],
+            }
+        ],
         attributes: ['fileImageId', 'url', 'createdAt'],
         order: [
             ['createdAt', 'DESC']

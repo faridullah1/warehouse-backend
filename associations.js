@@ -10,6 +10,9 @@ module.exports = function() {
     User.hasMany(File, { constraints: true, OnDelete: 'RESTRICT', foreignKey: 'userId'});
     File.belongsTo(User, { foreignKey: 'userId' });
 
+    User.hasMany(FileImage, { constraints: true, OnDelete: 'RESTRICT', foreignKey: 'userId'});
+    FileImage.belongsTo(User, { foreignKey: 'userId' });
+
     File.hasMany(FileImage, { constraints: true, OnDelete: 'RESTRICT', foreignKey: 'fileId'});
     FileImage.belongsTo(File, { foreignKey: 'fileId' });
 }
