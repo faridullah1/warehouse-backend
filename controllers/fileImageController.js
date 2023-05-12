@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const { FileImage } = require('../models/fileImageModel');
 const { File } = require('../models/fileModel');
 const { User } = require('../models/userModel');
@@ -11,6 +12,26 @@ exports.getAllFileImages = catchAsync(async (req, res, next) => {
     const page = +req.query.page || 1;
 	const limit = +req.query.limit || 10;
 
+    const { reference, createdAt, isDamaged } = req.query;
+    let where = {};
+
+    if (reference) {
+        where = {
+            [Op.or]: [
+                { reference: { [Op.like]: '%' + reference + '%' } }, 
+                { containerNumber: { [Op.like]: '%' + reference + '%' } }
+            ],   
+        }
+    }
+
+    if (isDamaged) {
+        where['noOfDamagedGoods'] = { [Op.gt]: 0 }
+    }
+
+    if (createdAt) {
+        where['createdAt'] = { [Op.gt]: new Date(createdAt['gt']), [Op.lt]: new Date(createdAt['lt']) };
+    }
+
     const offset = (page - 1) * limit;
 
     const pictures = await FileImage.findAndCountAll({
@@ -20,6 +41,7 @@ exports.getAllFileImages = catchAsync(async (req, res, next) => {
         [
             {
                 model: File,
+                where,
                 attributes: ['fileId', 'reference', 'containerNumber']
             },
             {
