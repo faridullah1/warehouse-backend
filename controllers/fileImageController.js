@@ -18,8 +18,8 @@ exports.getAllFileImages = catchAsync(async (req, res, next) => {
     if (reference) {
         where = {
             [Op.or]: [
-                { reference: { [Op.like]: '%' + reference + '%' } }, 
-                { containerNumber: { [Op.like]: '%' + reference + '%' } }
+                { reference: { [Op.iLike]: '%' + reference + '%' } }, 
+                { containerNumber: { [Op.iLike]: '%' + reference + '%' } }
             ],   
         }
     }
