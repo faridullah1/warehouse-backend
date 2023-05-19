@@ -96,13 +96,18 @@ exports.createUser = catchAsync(async (req, res, next) => {
 
     const { name, username, email, password, type, language } = req.body;
 
+	// App user email can be repated but admin user email can not be repated.
 	if (type === 'Admin') {
-		const admin = await User.find({ where: { email }});
+		const admin = await User.findOne({ where: { email }});
 		
 		if (admin) {
+			// Check what is the currently logged in user language;
 			const user = await User.findByPk(req.user.userId);
+
+			// Set error message based on user language
             const errorMessage = user.dataValues.language === 'nl' ? 'Fout: e-mailadres bestaat al' : 'email already exists';
-            return next(new AppError(errorMessage, 400));
+            
+			return next(new AppError(errorMessage, 400));
 		}
 	}
 
