@@ -40,7 +40,7 @@ exports.getAllUsers = catchAsync(async (req, res, next) => {
 
 		if (key === 'name') {
 			where.name = {
-				[Op.like]: '%' + search['name'] + '%'
+				[Op.iLike]: '%' + search['name'] + '%'
 			}
 		}
 	}
