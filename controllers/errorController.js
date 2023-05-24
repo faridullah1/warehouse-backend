@@ -1,3 +1,5 @@
+const Translation = require("../utils/translate");
+
 const sendErrorDev = (err, res) => {
 	res.status(err.statusCode).json({
 		status: err.status,
@@ -7,7 +9,7 @@ const sendErrorDev = (err, res) => {
 	});
 }
 
-const sendErrorProd = (err, res) => {
+const sendErrorProd = (err, res, lang) => {
 	let errorMessage = err.message;
 
 	if (err.name) {
@@ -20,7 +22,8 @@ const sendErrorProd = (err, res) => {
 			case 'SequelizeUniqueConstraintError':
                 err.statusCode = 400;
 				const field = Object.entries(err.fields);
-				errorMessage = `${field[0][0]} already exists`;
+				const fieldTranslation = (new Translation).getTranslation(lang, field[0][0]);
+				errorMessage = lang === 'en' ? `${fieldTranslation} already exists` : `${fieldTranslation} bestaat al`;
 				break;
 
 			case 'MulterError':
@@ -49,11 +52,11 @@ const sendErrorProd = (err, res) => {
 module.exports = (err, req, res, next) => {
 	err.statusCode = err.statusCode || 500;
 	err.status = err.status || 'error';
-
+	
 	if (process.env.NODE_ENV === 'development') {
-		sendErrorDev(err, res);
+		sendErrorDev(err, res, req.user.language);
 	}
 	else if (['production', 'test'].includes(process.env.NODE_ENV)) {
-		sendErrorProd(err, res);
+		sendErrorProd(err, res, req.user.language);
 	}
 }

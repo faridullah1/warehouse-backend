@@ -9,7 +9,6 @@ const { User } = require('../models/userModel');
 // Utils
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-const { Op } = require('sequelize');
 
 exports.login = catchAsync(async (req, res, next) => {
 	// #swagger.tags = ['Auth']
