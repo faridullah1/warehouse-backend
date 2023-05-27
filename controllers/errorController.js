@@ -53,10 +53,12 @@ module.exports = (err, req, res, next) => {
 	err.statusCode = err.statusCode || 500;
 	err.status = err.status || 'error';
 	
+	const userLanguage = req.user ? req.user.language : 'en';
+
 	if (process.env.NODE_ENV === 'development') {
-		sendErrorDev(err, res, req.user.language);
+		sendErrorDev(err, res, userLanguage);
 	}
 	else if (['production', 'test'].includes(process.env.NODE_ENV)) {
-		sendErrorProd(err, res, req.user.language);
+		sendErrorProd(err, res, userLanguage);
 	}
 }
