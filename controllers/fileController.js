@@ -194,7 +194,7 @@ exports.createFile = catchAsync(async (req, res, next) => {
 	const file = await File.create({ reference, containerNumber, userId: req.user.userId });
 
     const promises = [];
-    req.files.forEach(file => promises.push(uploadToS3(file, '')));
+    req.files.forEach(file => promises.push(uploadToS3(file, 'files')));
     req.body.pictures = await Promise.all(promises);
 
     if (isDamaged === "true") {
@@ -227,7 +227,7 @@ exports.updateFile = catchAsync(async (req, res, next) => {
 
     if (req.files && req.files.length > 0) {
         const promises = [];
-        req.files.forEach(file => promises.push(uploadToS3(file, '')));
+        req.files.forEach(file => promises.push(uploadToS3(file, 'files')));
         const urls = await Promise.all(promises);
     
         for(let url of urls) {
